@@ -37,6 +37,9 @@ end
 
 
 #### Routes ####
+get '/' do
+  redirect '/movies?page=1'
+end
 
 get '/movies' do
   @current_page_number = params[:page].to_i || 1
