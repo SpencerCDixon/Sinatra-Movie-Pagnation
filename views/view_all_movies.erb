@@ -1,1 +1,16 @@
-<h1> Hello Movies </h1>
+<h1>All Movies</h1>
+<table class="table">
+  <tr>
+    <th>ID</th>
+    <th>Title</th>
+  </tr>
+  <% @first_page.each do |movie| %>
+  <tr>
+    <td> <%= movie[:id] %> </td>
+    <td><a href="/movies/<%= movie[:id] %>"> <%= movie[:title] %></a> </td>
+
+  </tr>
+  <% end %>
+
+</table>
+<button  type="button" class="btn btn-info btn-large"><a style="color: #fff; text-decoration: none;" href="/movies?page=<%= @current_page_number += 1 %>">Next Page</a></button>

@@ -1,0 +1,22 @@
+<h1> <%= @current_movie[:title] %> </h1>
+
+
+<table class="table">
+  
+  <tr>
+    <th>Year Released</th>
+    <th>Synopsis</th>
+    <th>Critic's Rating</th>
+    <th>Genre</th>
+    <th>Studio</th>
+  </tr>
+
+  <tr>
+    <td> <%= @current_movie[:year] %> </td>
+    <td> <%= @current_movie[:synopsis] %> </td>
+    <td> <%= @current_movie[:rating] %> </td>
+    <td> <%= @current_movie[:genre] %> </td>
+    <td> <%= @current_movie[:studio] %> </td>
+  </tr>
+
+</table>
