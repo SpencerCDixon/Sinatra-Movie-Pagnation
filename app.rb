@@ -6,12 +6,16 @@ require 'csv'
 set :port, 9000
 
 before do
-  @movies = []
-  CSV.foreach('movies.csv', headers:true, header_converters: :symbol) do |row|
-     @movies << row.to_hash
-  end
+  @movies ||= query_movies
 end
 
+def query_movies
+  movies = []
+  CSV.foreach('movies.csv', headers:true, header_converters: :symbol) do |row|
+     movies << row.to_hash
+  end
+  movies
+end
 
 #### Model ####
 
@@ -34,7 +38,15 @@ def find_movie_by_id(movies,id)
   movies.find {|movie| movie[:id] == id}
 end
 
-
+def search(movies,params)
+  search_results = []
+  movies.each do |movie|
+    if movie.value?(params)
+      search_results << movie
+    end
+  end
+  search_results
+end
 
 #### Routes ####
 get '/' do
@@ -44,7 +56,13 @@ end
 get '/movies' do
   @current_page_number = params[:page].to_i || 1
   @sorted_movies = sort_movies_title(@movies)
-  @first_page = display_movie(@sorted_movies,params[:page])
+
+  if params.key?("query")
+    @first_page = search(@movies,params[:query].capitalize)
+  else
+    @first_page = display_movie(@sorted_movies,params[:page])
+  end
+
   erb :view_all_movies
 end
 
@@ -52,7 +70,3 @@ get '/movies/:id' do
   @current_movie = find_movie_by_id(@movies,params[:id])
   erb :individual_movie
 end
-
-
-# check to see if page number in params if not then set to 1
-# pass page number into method that grabs correct array of movies then displayw ith each
